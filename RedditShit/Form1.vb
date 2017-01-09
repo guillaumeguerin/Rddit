@@ -35,6 +35,8 @@ Public Class Form1
 
 #Region "Page Loading Functions"
     Private Sub WaitForPageLoad()
+        Timer1.Interval = 90000
+        Timer1.Enabled = True
         AddHandler WebBrowser1.DocumentCompleted, New WebBrowserDocumentCompletedEventHandler(AddressOf PageWaiter)
         While Not pageready
             Application.DoEvents()
@@ -45,6 +47,7 @@ Public Class Form1
     Private Sub PageWaiter(ByVal sender As Object, ByVal e As WebBrowserDocumentCompletedEventArgs)
         If WebBrowser1.ReadyState = WebBrowserReadyState.Complete Then
             pageready = True
+            Timer1.Enabled = False
             RemoveHandler WebBrowser1.DocumentCompleted, New WebBrowserDocumentCompletedEventHandler(AddressOf PageWaiter)
         End If
     End Sub
@@ -71,7 +74,7 @@ Public Class Form1
             Dim user As String = words(0)
             Dim pass As String = words(1)
             Login(user, pass)
-            Upvote("https://www.reddit.com/r/Guildwars2/comments/5eo56s/we_asian_mmo_now/")
+            Upvote("https://www.reddit.com/r/PoliticalVideo/comments/5mlbb6/fake_news_yeah_like_the_washington_post/")
             Logout()
             i += 1
         End While
@@ -118,7 +121,7 @@ Public Class Form1
 
     Private Function GetProxies() As List(Of String)
         Dim list As New List(Of String)
-        Using r As StreamReader = New StreamReader("C:\Python27\proxy.txt")
+        Using r As StreamReader = New StreamReader("C:\Python27\proxyHttps.txt")
             Dim line As String
             line = r.ReadLine
             Do While (Not line Is Nothing)
@@ -143,4 +146,10 @@ Public Class Form1
         End Using
         Return list
     End Function
+
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Timer1.Enabled = False
+        pageready = True
+    End Sub
 End Class
